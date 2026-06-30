@@ -1,6 +1,7 @@
 const cloudinary = require("../../config/cloudinary");
 const AppError = require("../../utils/AppError");
 const asyncHandler = require("express-async-handler");
+
 const uploadImages = asyncHandler(async (req, res, next) => {
   if (!req.files || req.files.length === 0) {
     return next(new AppError("Please upload at least one image", 400));
