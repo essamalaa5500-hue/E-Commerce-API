@@ -2,12 +2,74 @@
  * @swagger
  * tags:
  *   name: Orders
- *   description: Order Management Endpoints
+ *   description: Order Management APIs
  */
 
 /**
  * @swagger
- * /order:
+ * components:
+ *   schemas:
+ *     OrderProduct:
+ *       type: object
+ *       required:
+ *         - product
+ *         - quantity
+ *         - price
+ *       properties:
+ *         product:
+ *           type: string
+ *           example: 6862e1b55b5a0a1234567890
+ *         quantity:
+ *           type: integer
+ *           example: 2
+ *         price:
+ *           type: number
+ *           example: 250
+ *
+ *     Order:
+ *       type: object
+ *       required:
+ *         - user
+ *         - products
+ *         - totalPrice
+ *       properties:
+ *         _id:
+ *           type: string
+ *           example: 6862e1b55b5a0a1234567890
+ *         user:
+ *           type: string
+ *           example: 6862e1b55b5a0a1234567890
+ *         products:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/OrderProduct'
+ *         totalPrice:
+ *           type: number
+ *           example: 500
+ *         paymentStatus:
+ *           type: string
+ *           enum:
+ *             - pending
+ *             - paid
+ *             - failed
+ *           example: pending
+ *         paymobOrderId:
+ *           type: string
+ *           example: paymob_123456
+ *         transactionId:
+ *           type: string
+ *           example: txn_123456
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ */
+
+/**
+ * @swagger
+ * /orders:
  *   get:
  *     summary: Get all orders (Admin)
  *     tags: [Orders]
@@ -16,15 +78,11 @@
  *     responses:
  *       200:
  *         description: Orders retrieved successfully
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: Forbidden
  */
 
 /**
  * @swagger
- * /order/{id}:
+ * /orders/{id}:
  *   get:
  *     summary: Get order by ID (Admin)
  *     tags: [Orders]
@@ -39,17 +97,13 @@
  *     responses:
  *       200:
  *         description: Order retrieved successfully
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: Forbidden
  *       404:
  *         description: Order not found
  */
 
 /**
  * @swagger
- * /order:
+ * /orders:
  *   post:
  *     summary: Create new order
  *     tags: [Orders]
@@ -62,34 +116,28 @@
  *           schema:
  *             type: object
  *             required:
+ *               - user
  *               - products
+ *               - totalPrice
  *             properties:
+ *               user:
+ *                 type: string
+ *                 example: 6862e1b55b5a0a1234567890
  *               products:
  *                 type: array
  *                 items:
- *                   type: object
- *                   required:
- *                     - product
- *                     - quantity
- *                   properties:
- *                     product:
- *                       type: string
- *                       example: 6870f0d3d8d7d6d3c6d90a1b
- *                     quantity:
- *                       type: integer
- *                       example: 2
+ *                   $ref: '#/components/schemas/OrderProduct'
+ *               totalPrice:
+ *                 type: number
+ *                 example: 500
  *     responses:
  *       201:
  *         description: Order created successfully
- *       400:
- *         description: Invalid request
- *       401:
- *         description: Unauthorized
  */
 
 /**
  * @swagger
- * /order/{id}:
+ * /orders/{id}:
  *   patch:
  *     summary: Update order
  *     tags: [Orders]
@@ -114,24 +162,20 @@
  *                   - pending
  *                   - paid
  *                   - failed
- *               paymobOrderId:
- *                 type: string
- *                 example: paymob_order_123456
  *               transactionId:
  *                 type: string
- *                 example: txn_987654321
+ *               paymobOrderId:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Order updated successfully
- *       401:
- *         description: Unauthorized
  *       404:
  *         description: Order not found
  */
 
 /**
  * @swagger
- * /order/{id}:
+ * /orders/{id}:
  *   delete:
  *     summary: Delete order (Admin)
  *     tags: [Orders]
@@ -146,10 +190,6 @@
  *     responses:
  *       200:
  *         description: Order deleted successfully
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: Forbidden
  *       404:
  *         description: Order not found
  */

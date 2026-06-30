@@ -1,12 +1,12 @@
 const Order = require("../models/Order");
 const AppError = require("../../utils/AppError");
-
-const getAllOrders = async (req, res) => {
+const asyncHandler = require("express-async-handler");
+const getAllOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find();
   res.json({ message: "All Orders", data: orders });
-};
+});
 
-const getOrderById = async (req, res, next) => {
+const getOrderById = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   if (!id) {
     return next(new AppError("Order not found", 404));
@@ -16,20 +16,55 @@ const getOrderById = async (req, res, next) => {
     return next(new AppError("Order not found", 404));
   }
   res.json({ message: `Order ${order.name} found`, data: order });
-};
-
+});
+const getMyOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id });
+  res.json({ message: "My Orders", data: orders });
+});
+const getMyOrderById = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  if (!id) {
+    return next(new AppError("Order not found", 404));
+  }
+  const order = await Order.findOne({ _id: id, user: req.user._id });
+  if (!order) {
+    return next(new AppError("Order not found", 404));
+  }
+  res.json({ message: `Order ${order.name} found`, data: order });
+});
 const createOrder = async (req, res, next) => {
   const { products } = req.body;
 
+  if (!products || !products.length) {
+    return next(new AppError("products are required", 400));
+  }
+
   let totalPrice = 0;
+  const orderProducts = [];
 
   for (const item of products) {
-    totalPrice += item.price * item.quantity;
+    const product = await Product.findById(item.product);
+    if (!product) {
+      return next(new AppError(`Product ${item.product} not found`, 404));
+    }
+    if (!item.quantity || item.quantity < 1) {
+      return next(new AppError("Invalid quantity", 400));
+    }
+    if (product.stock < item.quantity) {
+      return next(new AppError(`Insufficient stock for ${product.name}`, 400));
+    }
+
+    orderProducts.push({
+      product: product._id,
+      quantity: item.quantity,
+      price: product.price,
+    });
+    totalPrice += product.price * item.quantity;
   }
 
   const createdOrder = await Order.create({
     user: req.user._id,
-    products,
+    products: orderProducts,
     totalPrice,
   });
 
@@ -39,24 +74,51 @@ const createOrder = async (req, res, next) => {
   });
 };
 
-const updateOrder = async (req, res, next) => {
+const cancelOrder = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   if (!id) {
     return next(new AppError("Order not found", 404));
   }
-  const updatedOreder = await Order.findByIdAndUpdate(id, req.body, {
-    new: true,
+  const order = await Order.One({ _id: id, user: req.user._id });
+  if (!order) {
+    return next(new AppError("Order not found", 404));
+  }
+  if (order.paymentStatus !== "pending") {
+    return next(new AppError("Only pending order can be cancelled", 400));
+  }
+  order.paymentStatus = "cancelled";
+  await order.save();
+  res.json({
+    message: "Order cancelled successfully",
+    data: order,
   });
+});
+
+const updateOrder = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const { paymentStatus } = req.body;
+  const allowedPaymentStatus = ["pending", "paid", "failed", "cancelled"];
+  if (!id) {
+    return next(new AppError("Order not found", 404));
+  }
+  if (!paymentStatus || !allowedPaymentStatus.includes(paymentStatus)) {
+    return next(new AppError("Invalid payment status", 400));
+  }
+  const updateOrder = await Order.findByIdAndUpdate(
+    id,
+    { paymentStatus },
+    { new: true },
+  );
   if (!updatedOreder) {
     return next(new AppError("Order not found", 404));
   }
   res.json({
-    message: `Order ${updatedOreder.name} Updated Successfully`,
+    message: `Order Updated Successfully`,
     data: updatedOreder,
   });
-};
+});
 
-const deleteOrder = async (req, res, next) => {
+const deleteOrder = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   if (!id) {
     return next(new AppError("Order not found", 404));
@@ -69,7 +131,7 @@ const deleteOrder = async (req, res, next) => {
     message: `Order ${deletedOrder.name} Deleted Successfully`,
     data: deletedOrder,
   });
-};
+});
 
 module.exports = {
   getAllOrders,
@@ -77,4 +139,7 @@ module.exports = {
   createOrder,
   updateOrder,
   deleteOrder,
+  getMyOrders,
+  getMyOrderById,
+  cancelOrder,
 };

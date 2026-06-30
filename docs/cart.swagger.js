@@ -2,52 +2,72 @@
  * @swagger
  * tags:
  *   name: Cart
- *   description: Shopping Cart Management Endpoints
+ *   description: Shopping Cart APIs
  */
 
 /**
  * @swagger
- * /cart:
- *   get:
- *     summary: Get all carts
- *     tags: [Cart]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: All carts retrieved successfully
- *       401:
- *         description: Unauthorized
- */
-
-/**
- * @swagger
- * /cart/{id}:
- *   get:
- *     summary: Get cart by ID
- *     tags: [Cart]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
+ * components:
+ *   schemas:
+ *     CartItem:
+ *       type: object
+ *       required:
+ *         - product
+ *         - quantity
+ *         - price
+ *       properties:
+ *         product:
  *           type: string
+ *           example: 6862e1b55b5a0a1234567890
+ *         quantity:
+ *           type: integer
+ *           example: 2
+ *         price:
+ *           type: number
+ *           example: 250
+ *
+ *     Cart:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         user:
+ *           type: string
+ *         products:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/CartItem'
+ *         totalPrice:
+ *           type: number
+ *           example: 500
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ */
+
+/**
+ * @swagger
+ * /cart/my:
+ *   get:
+ *     summary: Get current user's cart
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Cart retrieved successfully
- *       401:
- *         description: Unauthorized
  *       404:
  *         description: Cart not found
  */
 
 /**
  * @swagger
- * /cart:
+ * /cart/my/add:
  *   post:
- *     summary: Create a new cart
+ *     summary: Add product to cart
  *     tags: [Cart]
  *     security:
  *       - bearerAuth: []
@@ -58,52 +78,31 @@
  *           schema:
  *             type: object
  *             required:
- *               - user
- *               - products
- *               - totalPrice
+ *               - product
+ *               - quantity
  *             properties:
- *               user:
+ *               product:
  *                 type: string
- *                 example: 686fe9dd71f7c437d9d1f6f2
- *               products:
- *                 type: array
- *                 items:
- *                   type: object
- *                   required:
- *                     - product
- *                     - quantity
- *                     - price
- *                   properties:
- *                     product:
- *                       type: string
- *                       example: 686fe9dd71f7c437d9d1f700
- *                     quantity:
- *                       type: integer
- *                       example: 2
- *                     price:
- *                       type: number
- *                       example: 1500
- *               totalPrice:
- *                 type: number
- *                 example: 3000
+ *                 example: 6862e1b55b5a0a1234567890
+ *               quantity:
+ *                 type: integer
+ *                 example: 2
  *     responses:
  *       201:
- *         description: Cart created successfully
- *       401:
- *         description: Unauthorized
+ *         description: Product added to cart
  */
 
 /**
  * @swagger
- * /cart/{id}:
+ * /cart/my/update/{productId}:
  *   patch:
- *     summary: Update cart
+ *     summary: Update product quantity in cart
  *     tags: [Cart]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: productId
  *         required: true
  *         schema:
  *           type: string
@@ -113,50 +112,51 @@
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - quantity
  *             properties:
- *               user:
- *                 type: string
- *               products:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     product:
- *                       type: string
- *                     quantity:
- *                       type: integer
- *                     price:
- *                       type: number
- *               totalPrice:
- *                 type: number
+ *               quantity:
+ *                 type: integer
+ *                 example: 3
  *     responses:
  *       200:
  *         description: Cart updated successfully
- *       401:
- *         description: Unauthorized
  *       404:
- *         description: Cart not found
+ *         description: Product not found in cart
  */
 
 /**
  * @swagger
- * /cart/{id}:
+ * /cart/my/remove/{productId}:
  *   delete:
- *     summary: Delete cart
+ *     summary: Remove product from cart
  *     tags: [Cart]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: productId
  *         required: true
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Cart deleted successfully
- *       401:
- *         description: Unauthorized
+ *         description: Product removed from cart
+ *       404:
+ *         description: Product not found in cart
+ */
+
+/**
+ * @swagger
+ * /cart/my/clear:
+ *   delete:
+ *     summary: Clear current user's cart
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Cart cleared successfully
  *       404:
  *         description: Cart not found
  */

@@ -1,8 +1,8 @@
 const Product = require("../models/Product");
 const AppError = require("../../utils/AppError");
 const paginate = require("../../middleware/paginate");
-
-const getAllProducts = async (req, res) => {
+const asyncHandler = require("express-async-handler");
+const getAllProducts = asyncHandler(async (req, res) => {
   const { keyword, category, minPrice, maxPrice } = req.query;
   const filter = {};
   if (keyword) {
@@ -29,9 +29,9 @@ const getAllProducts = async (req, res) => {
     .limit(limit)
     .populate("category");
   res.json({ message: "All Products", data: products });
-};
+});
 
-const getProductById = async (req, res, next) => {
+const getProductById = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   if (!id) {
     return next(new AppError("Product not found", 404));
@@ -41,9 +41,9 @@ const getProductById = async (req, res, next) => {
     return next(new AppError("Product not found", 404));
   }
   res.json({ message: `Product ${product.name} found`, data: product });
-};
+});
 
-const createProduct = async (req, res, next) => {
+const createProduct = asyncHandler(async (req, res, next) => {
   const { name, description, price, stock, category, images } = req.body;
 
   if (!images || !images.length) {
@@ -67,9 +67,9 @@ const createProduct = async (req, res, next) => {
   } catch (error) {
     return next(new AppError("Error occured while creating product", 500));
   }
-};
+});
 
-const updateProduct = async (req, res, next) => {
+const updateProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   if (!id) {
     return next(new AppError("Product not found", 404));
@@ -84,9 +84,9 @@ const updateProduct = async (req, res, next) => {
     message: `Product ${updatedProduct.name} Updated Successfully`,
     data: updatedProduct,
   });
-};
+});
 
-const deleteProduct = async (req, res, next) => {
+const deleteProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   if (!id) {
     return next(new AppError("Product not found", 404));
@@ -99,7 +99,7 @@ const deleteProduct = async (req, res, next) => {
     message: `Product ${deletedProduct.name} Deleted Successfully`,
     data: deletedProduct,
   });
-};
+});
 
 module.exports = {
   getAllProducts,

@@ -3,18 +3,18 @@ const router = express.Router();
 const Cart = require("../models/Cart");
 const verifyToken = require("../../middleware/verifyToken");
 const {
-  getAllCarts,
-  getCartById,
-  createCart,
-  updateCart,
-  deleteCart,
+  getMyCart,
+  addItemToCart,
+  updateItemQuantity,
+  removeItemFromCart,
+  clearCart,
 } = require("../controllers/cartController");
 const verifyAdmin = require("../../middleware/verifyAdmin");
 
-router.get("/", verifyToken, getAllCarts);
-router.get("/:id", verifyToken, getCartById);
-router.post("/", verifyToken, createCart);
-router.patch("/:id", verifyToken, updateCart);
-router.delete("/:id", verifyToken, deleteCart);
+router.get("/my", verifyToken, getMyCart);
+router.post("/my/add", verifyToken, addItemToCart);
+router.patch("/my/update/:productId", verifyToken, updateItemQuantity);
+router.delete("/my/remove/:productId", verifyToken, removeItemFromCart);
+router.delete("/my/clear", verifyToken, clearCart);
 
 module.exports = router;

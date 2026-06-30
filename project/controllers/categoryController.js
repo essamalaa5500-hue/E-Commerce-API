@@ -1,13 +1,13 @@
 const Category = require("../models/Category");
 const AppError = require("../../utils/AppError");
 const paginate = require("../../middleware/paginate");
-
-const getAllCategories = async (req, res) => {
+const asyncHandler = require("express-async-handler");
+const getAllCategories = asyncHandler(async (req, res) => {
   const categories = await req.paginate(Category.find());
   res.json({ message: "All Categories", data: categories });
-};
+});
 
-const getCategoryById = async (req, res, next) => {
+const getCategoryById = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   if (!id) {
     return next(new AppError("Category not found", 404));
@@ -17,16 +17,16 @@ const getCategoryById = async (req, res, next) => {
     return next(new AppError("Category not found", 404));
   }
   res.json({ message: `Category ${category.name} found`, data: category });
-};
-const createCategory = async (req, res, next) => {
+});
+const createCategory = asyncHandler(async (req, res, next) => {
   const { name, description, image } = req.body;
   const createdCategory = await Category.create({ name, description, image });
   res.json({
     message: `Category ${createdCategory.name} Created Successfully`,
     data: createdCategory,
   });
-};
-const updateCategory = async (req, res, next) => {
+});
+const updateCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   if (!id) {
     return next(new AppError("Category not found", 404));
@@ -41,8 +41,8 @@ const updateCategory = async (req, res, next) => {
     message: `Category ${updatedCategory.name} Updated Successfully`,
     data: updatedCategory,
   });
-};
-const deleteCategory = async (req, res, next) => {
+});
+const deleteCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   if (!id) {
     return next(new AppError("Category not found", 404));
@@ -55,7 +55,7 @@ const deleteCategory = async (req, res, next) => {
     message: `Category ${deletedCategory.name} Deleted Successfully`,
     data: deletedCategory,
   });
-};
+});
 
 module.exports = {
   getAllCategories,
