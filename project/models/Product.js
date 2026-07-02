@@ -6,13 +6,22 @@ const ProductSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
+      unique: true,
+      minlength: [3, "Name should be at least 3 characters"],
+      maxlength: [150, "Name should be less than 150 characters"],
+    },
+    slug: {
+      type: String,
+      unique: true,
+      lowercase: true,
+      required: true,
     },
     description: {
       type: String,
       required: true,
       trim: true,
+      maxlength: [3000, "Description should be less than 3000 characters"],
     },
     price: {
       type: Number,
@@ -21,15 +30,8 @@ const ProductSchema = new mongoose.Schema(
     },
     images: [
       {
-        url: {
-          type: String,
-          required: true,
-        },
-
-        publicId: {
-          type: String,
-          required: true,
-        },
+        url: String,
+        publicId: String,
       },
     ],
     stock: {
@@ -42,6 +44,20 @@ const ProductSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "Category",
       required: true,
+      index: true,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    averageRating: {
+      type: Number,
+      default: 0,
+    },
+
+    numReviews: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true },

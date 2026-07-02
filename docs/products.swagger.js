@@ -2,7 +2,7 @@
  * @swagger
  * tags:
  *   name: Products
- *   description: Product Management Endpoints
+ *   description: Product Management APIs
  */
 
 /**
@@ -10,7 +10,7 @@
  * /product:
  *   get:
  *     summary: Get all products
- *     description: Retrieve all products with pagination and filters.
+ *     description: Retrieve products with pagination, search, and filters.
  *     tags: [Products]
  *     parameters:
  *       - in: query
@@ -18,35 +18,37 @@
  *         schema:
  *           type: integer
  *           example: 1
- *         description: Page number
+ *
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           example: 10
- *         description: Number of products per page
+ *
  *       - in: query
  *         name: keyword
  *         schema:
  *           type: string
  *           example: iphone
- *         description: Search by product name
+ *
  *       - in: query
  *         name: category
  *         schema:
  *           type: string
  *           example: 686fe9dd71f7c437d9d1f6f2
- *         description: Category ID
+ *
  *       - in: query
  *         name: minPrice
  *         schema:
  *           type: number
  *           example: 1000
+ *
  *       - in: query
  *         name: maxPrice
  *         schema:
  *           type: number
  *           example: 5000
+ *
  *     responses:
  *       200:
  *         description: Products retrieved successfully
@@ -75,14 +77,14 @@
  * @swagger
  * /product:
  *   post:
- *     summary: Create new product
+ *     summary: Create product
  *     tags: [Products]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -111,19 +113,14 @@
  *               images:
  *                 type: array
  *                 items:
- *                   type: object
- *                   properties:
- *                     url:
- *                       type: string
- *                       example: https://example.com/image1.jpg
- *                     publicId:
- *                       type: string
- *                       example: products/image1
+ *                   type: string
+ *                   format: binary
+ *
  *     responses:
  *       201:
  *         description: Product created successfully
  *       400:
- *         description: Images are required
+ *         description: Validation error
  *       401:
  *         description: Unauthorized
  *       403:
@@ -147,7 +144,7 @@
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -164,12 +161,9 @@
  *               images:
  *                 type: array
  *                 items:
- *                   type: object
- *                   properties:
- *                     url:
- *                       type: string
- *                     publicId:
- *                       type: string
+ *                   type: string
+ *                   format: binary
+ *
  *     responses:
  *       200:
  *         description: Product updated successfully

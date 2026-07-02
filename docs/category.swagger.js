@@ -7,13 +7,48 @@
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Category:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         image:
+ *           type: string
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ */
+
+/**
+ * @swagger
  * /category:
  *   get:
  *     summary: Get all categories
  *     tags: [Categories]
  *     responses:
  *       200:
- *         description: Categories retrieved successfully
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: All Categories
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Category'
  */
 
 /**
@@ -30,7 +65,7 @@
  *           type: string
  *     responses:
  *       200:
- *         description: Category retrieved successfully
+ *         description: Success
  *       404:
  *         description: Category not found
  */
@@ -39,14 +74,14 @@
  * @swagger
  * /category:
  *   post:
- *     summary: Create category
+ *     summary: Create category (Admin only)
  *     tags: [Categories]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -56,27 +91,25 @@
  *             properties:
  *               name:
  *                 type: string
- *                 example: Electronics
  *               description:
  *                 type: string
- *                 example: All electronic products
  *               image:
  *                 type: string
- *                 example: https://example.com/category.jpg
+ *                 format: binary
  *     responses:
  *       201:
  *         description: Category created successfully
  *       401:
  *         description: Unauthorized
  *       403:
- *         description: Admin only
+ *         description: Forbidden (Admin only)
  */
 
 /**
  * @swagger
  * /category/{id}:
  *   patch:
- *     summary: Update category
+ *     summary: Update category (Admin only)
  *     tags: [Categories]
  *     security:
  *       - bearerAuth: []
@@ -89,31 +122,29 @@
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               name:
  *                 type: string
- *                 example: Electronics
  *               description:
  *                 type: string
- *                 example: Updated description
  *               image:
  *                 type: string
- *                 example: https://example.com/new-image.jpg
+ *                 format: binary
  *     responses:
  *       200:
- *         description: Category updated successfully
+ *         description: Updated successfully
  *       404:
- *         description: Category not found
+ *         description: Not found
  */
 
 /**
  * @swagger
  * /category/{id}:
  *   delete:
- *     summary: Delete category
+ *     summary: Delete category (Admin only)
  *     tags: [Categories]
  *     security:
  *       - bearerAuth: []
@@ -125,7 +156,7 @@
  *           type: string
  *     responses:
  *       200:
- *         description: Category deleted successfully
+ *         description: Deleted successfully
  *       404:
- *         description: Category not found
+ *         description: Not found
  */

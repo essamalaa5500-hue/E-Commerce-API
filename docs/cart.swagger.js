@@ -11,16 +11,12 @@
  *   schemas:
  *     CartItem:
  *       type: object
- *       required:
- *         - product
- *         - quantity
- *         - price
  *       properties:
  *         product:
  *           type: string
  *           example: 6862e1b55b5a0a1234567890
  *         quantity:
- *           type: integer
+ *           type: number
  *           example: 2
  *         price:
  *           type: number
@@ -39,7 +35,6 @@
  *             $ref: '#/components/schemas/CartItem'
  *         totalPrice:
  *           type: number
- *           example: 500
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -59,8 +54,16 @@
  *     responses:
  *       200:
  *         description: Cart retrieved successfully
- *       404:
- *         description: Cart not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: My Cart
+ *                 data:
+ *                   $ref: '#/components/schemas/Cart'
  */
 
 /**
@@ -78,18 +81,18 @@
  *           schema:
  *             type: object
  *             required:
- *               - product
+ *               - productId
  *               - quantity
  *             properties:
- *               product:
+ *               productId:
  *                 type: string
  *                 example: 6862e1b55b5a0a1234567890
  *               quantity:
- *                 type: integer
+ *                 type: number
  *                 example: 2
  *     responses:
- *       201:
- *         description: Product added to cart
+ *       200:
+ *         description: Item added successfully
  */
 
 /**
@@ -116,13 +119,11 @@
  *               - quantity
  *             properties:
  *               quantity:
- *                 type: integer
+ *                 type: number
  *                 example: 3
  *     responses:
  *       200:
  *         description: Cart updated successfully
- *       404:
- *         description: Product not found in cart
  */
 
 /**
@@ -141,22 +142,18 @@
  *           type: string
  *     responses:
  *       200:
- *         description: Product removed from cart
- *       404:
- *         description: Product not found in cart
+ *         description: Item removed successfully
  */
 
 /**
  * @swagger
  * /cart/my/clear:
  *   delete:
- *     summary: Clear current user's cart
+ *     summary: Clear user's cart
  *     tags: [Cart]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Cart cleared successfully
- *       404:
- *         description: Cart not found
  */

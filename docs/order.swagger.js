@@ -11,16 +11,12 @@
  *   schemas:
  *     OrderProduct:
  *       type: object
- *       required:
- *         - product
- *         - quantity
- *         - price
  *       properties:
  *         product:
  *           type: string
  *           example: 6862e1b55b5a0a1234567890
  *         quantity:
- *           type: integer
+ *           type: number
  *           example: 2
  *         price:
  *           type: number
@@ -28,37 +24,28 @@
  *
  *     Order:
  *       type: object
- *       required:
- *         - user
- *         - products
- *         - totalPrice
  *       properties:
  *         _id:
  *           type: string
- *           example: 6862e1b55b5a0a1234567890
  *         user:
  *           type: string
- *           example: 6862e1b55b5a0a1234567890
  *         products:
  *           type: array
  *           items:
  *             $ref: '#/components/schemas/OrderProduct'
  *         totalPrice:
  *           type: number
- *           example: 500
  *         paymentStatus:
  *           type: string
  *           enum:
  *             - pending
  *             - paid
  *             - failed
- *           example: pending
+ *             - cancelled
  *         paymobOrderId:
  *           type: string
- *           example: paymob_123456
  *         transactionId:
  *           type: string
- *           example: txn_123456
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -71,20 +58,20 @@
  * @swagger
  * /orders:
  *   get:
- *     summary: Get all orders (Admin)
+ *     summary: Get all orders (Admin only)
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Orders retrieved successfully
+ *         description: Success
  */
 
 /**
  * @swagger
  * /orders/{id}:
  *   get:
- *     summary: Get order by ID (Admin)
+ *     summary: Get order by ID (Admin only)
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []
@@ -96,7 +83,7 @@
  *           type: string
  *     responses:
  *       200:
- *         description: Order retrieved successfully
+ *         description: Success
  *       404:
  *         description: Order not found
  */
@@ -105,7 +92,7 @@
  * @swagger
  * /orders:
  *   post:
- *     summary: Create new order
+ *     summary: Create order (User)
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []
@@ -116,20 +103,20 @@
  *           schema:
  *             type: object
  *             required:
- *               - user
  *               - products
- *               - totalPrice
  *             properties:
- *               user:
- *                 type: string
- *                 example: 6862e1b55b5a0a1234567890
  *               products:
  *                 type: array
  *                 items:
- *                   $ref: '#/components/schemas/OrderProduct'
- *               totalPrice:
- *                 type: number
- *                 example: 500
+ *                   type: object
+ *                   required:
+ *                     - product
+ *                     - quantity
+ *                   properties:
+ *                     product:
+ *                       type: string
+ *                     quantity:
+ *                       type: number
  *     responses:
  *       201:
  *         description: Order created successfully
@@ -139,7 +126,7 @@
  * @swagger
  * /orders/{id}:
  *   patch:
- *     summary: Update order
+ *     summary: Update order payment status
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []
@@ -162,22 +149,17 @@
  *                   - pending
  *                   - paid
  *                   - failed
- *               transactionId:
- *                 type: string
- *               paymobOrderId:
- *                 type: string
+ *                   - cancelled
  *     responses:
  *       200:
  *         description: Order updated successfully
- *       404:
- *         description: Order not found
  */
 
 /**
  * @swagger
  * /orders/{id}:
  *   delete:
- *     summary: Delete order (Admin)
+ *     summary: Delete order (Admin only)
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []
@@ -190,6 +172,4 @@
  *     responses:
  *       200:
  *         description: Order deleted successfully
- *       404:
- *         description: Order not found
  */

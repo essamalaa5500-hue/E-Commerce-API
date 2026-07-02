@@ -2,14 +2,14 @@
  * @swagger
  * tags:
  *   name: Users
- *   description: User Management Endpoints
+ *   description: User Authentication & Management APIs
  */
 
 /**
  * @swagger
  * /users:
  *   get:
- *     summary: Get all users
+ *     summary: Get all users (Admin only)
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -26,7 +26,7 @@
  * @swagger
  * /users/{id}:
  *   get:
- *     summary: Get user by ID
+ *     summary: Get user by ID (Admin only)
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -47,7 +47,7 @@
  * @swagger
  * /users/{id}:
  *   patch:
- *     summary: Update user
+ *     summary: Update user (Admin only)
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -72,19 +72,19 @@
  *                 type: string
  *               role:
  *                 type: string
- *                 enum:
- *                   - admin
- *                   - user
+ *                 enum: [admin, user]
  *     responses:
  *       200:
  *         description: User updated successfully
+ *       404:
+ *         description: User not found
  */
 
 /**
  * @swagger
  * /users/{id}:
  *   delete:
- *     summary: Delete user
+ *     summary: Delete user (Admin only)
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -97,6 +97,8 @@
  *     responses:
  *       200:
  *         description: User deleted successfully
+ *       404:
+ *         description: User not found
  */
 
 /**
@@ -126,15 +128,17 @@
  *                 type: string
  *                 example: 12345678
  *     responses:
- *       200:
+ *       201:
  *         description: User created successfully
+ *       400:
+ *         description: User already exists
  */
 
 /**
  * @swagger
  * /users/login:
  *   post:
- *     summary: Login
+ *     summary: Login user
  *     tags: [Users]
  *     requestBody:
  *       required: true
@@ -155,6 +159,8 @@
  *     responses:
  *       200:
  *         description: Login successful
+ *       401:
+ *         description: Invalid credentials
  */
 
 /**
@@ -163,18 +169,18 @@
  *   post:
  *     summary: Refresh access token
  *     tags: [Users]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Access token refreshed
+ *         description: Access token generated
+ *       401:
+ *         description: Invalid refresh token
  */
 
 /**
  * @swagger
  * /users/logout:
  *   post:
- *     summary: Logout
+ *     summary: Logout user
  *     tags: [Users]
  *     responses:
  *       200:
@@ -185,7 +191,7 @@
  * @swagger
  * /users/updateProfile:
  *   patch:
- *     summary: Update profile
+ *     summary: Update logged-in user profile
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -198,14 +204,13 @@
  *             properties:
  *               name:
  *                 type: string
- *                 example: Essam
  *               email:
  *                 type: string
- *                 example: essam@gmail.com
  *               phone:
  *                 type: string
- *                 example: "01012345678"
  *     responses:
  *       200:
  *         description: Profile updated successfully
+ *       401:
+ *         description: Unauthorized
  */

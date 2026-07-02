@@ -4,6 +4,7 @@ const User = require("../models/users");
 const AppError = require("../../utils/AppError");
 const verifyToken = require("../../middleware/verifyToken");
 const verfiyAdmin = require("../../middleware/verifyAdmin");
+const upload = require("../../middleware/uploadImage");
 
 const {
   SignUp,
@@ -29,9 +30,14 @@ router.get("/:id", verifyToken, verfiyAdmin, getUserById);
 router.post("/signup", SignUpValidation, SignUp);
 
 router.post("/login", LoginValidation, Login);
-router.post("/refresh", verifyToken, refreshToken);
+router.post("/refresh", refreshToken);
 router.post("/logout", logout);
-router.patch("/updateProfile", verifyToken, updateProfile);
+router.patch(
+  "/updateProfile",
+  verifyToken,
+  upload.single("profileImage"),
+  updateProfile,
+);
 router.patch("/:id", verifyToken, verfiyAdmin, updateUser);
 
 router.delete("/:id", verifyToken, verfiyAdmin, deleteUser);

@@ -2,14 +2,14 @@
  * @swagger
  * tags:
  *   name: Password
- *   description: Password & Email Verification Endpoints
+ *   description: Password & Email Verification APIs
  */
 
 /**
  * @swagger
  * /password/forgot-password:
  *   post:
- *     summary: Send password reset OTP
+ *     summary: Send OTP to reset password
  *     tags: [Password]
  *     requestBody:
  *       required: true
@@ -26,6 +26,8 @@
  *     responses:
  *       200:
  *         description: OTP sent successfully
+ *       400:
+ *         description: Email is required
  *       404:
  *         description: User not found
  */
@@ -55,12 +57,12 @@
  *                 example: "123456"
  *               newPassword:
  *                 type: string
- *                 example: NewPassword123
+ *                 example: StrongPassword123
  *     responses:
  *       200:
  *         description: Password reset successfully
  *       400:
- *         description: Invalid OTP or expired OTP
+ *         description: Invalid request / OTP invalid / OTP expired
  *       404:
  *         description: User not found
  */
@@ -69,7 +71,7 @@
  * @swagger
  * /password/change-password:
  *   patch:
- *     summary: Change password
+ *     summary: Change password (logged in user)
  *     tags: [Password]
  *     security:
  *       - bearerAuth: []
@@ -93,7 +95,7 @@
  *       200:
  *         description: Password changed successfully
  *       400:
- *         description: Invalid password
+ *         description: Invalid old password
  *       401:
  *         description: Unauthorized
  */
@@ -108,7 +110,7 @@
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Verification OTP sent successfully
+ *         description: OTP sent successfully
  *       400:
  *         description: User already verified
  *       401:

@@ -6,7 +6,7 @@ const {
   getAllReviews,
   getReviewById,
   createReview,
-  updatedReview,
+  updateReview,
   deleteReview,
 } = require("../controllers/reviewController");
 const verifyAdmin = require("../../middleware/verifyAdmin");
@@ -14,7 +14,7 @@ const verifyAdmin = require("../../middleware/verifyAdmin");
 router.get("/", verifyToken, verifyAdmin, getAllReviews);
 router.get("/:id", verifyToken, verifyAdmin, getReviewById);
 router.post("/", verifyToken, createReview);
-router.patch("/:id", verifyToken, updatedReview);
+router.patch("/:id", verifyToken, updateReview);
 router.delete("/:id", verifyToken, deleteReview);
 
 module.exports = router;

@@ -2,14 +2,14 @@
  * @swagger
  * tags:
  *   name: Reviews
- *   description: Review Management Endpoints
+ *   description: Product Reviews Management APIs
  */
 
 /**
  * @swagger
  * /review:
  *   get:
- *     summary: Get all reviews (Admin)
+ *     summary: Get all reviews (Admin only)
  *     tags: [Reviews]
  *     security:
  *       - bearerAuth: []
@@ -26,7 +26,7 @@
  * @swagger
  * /review/{id}:
  *   get:
- *     summary: Get review by ID (Admin)
+ *     summary: Get review by ID (Admin only)
  *     tags: [Reviews]
  *     security:
  *       - bearerAuth: []
@@ -39,19 +39,19 @@
  *     responses:
  *       200:
  *         description: Review retrieved successfully
+ *       404:
+ *         description: Review not found
  *       401:
  *         description: Unauthorized
  *       403:
  *         description: Forbidden
- *       404:
- *         description: Review not found
  */
 
 /**
  * @swagger
  * /review:
  *   post:
- *     summary: Create a review
+ *     summary: Create a review (one per user per product)
  *     tags: [Reviews]
  *     security:
  *       - bearerAuth: []
@@ -81,7 +81,7 @@
  *       201:
  *         description: Review created successfully
  *       400:
- *         description: Invalid request or review already exists
+ *         description: Invalid input or duplicate review
  *       401:
  *         description: Unauthorized
  */
@@ -114,14 +114,14 @@
  *                 example: 4
  *               comment:
  *                 type: string
- *                 example: Very good product
+ *                 example: Updated review text
  *     responses:
  *       200:
  *         description: Review updated successfully
- *       401:
- *         description: Unauthorized
  *       404:
  *         description: Review not found
+ *       401:
+ *         description: Unauthorized
  */
 
 /**
@@ -141,8 +141,8 @@
  *     responses:
  *       200:
  *         description: Review deleted successfully
- *       401:
- *         description: Unauthorized
  *       404:
  *         description: Review not found
+ *       401:
+ *         description: Unauthorized
  */

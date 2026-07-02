@@ -18,7 +18,6 @@ const routesCategory = require("./project/routes/category");
 const routesCart = require("./project/routes/cart");
 const routesReview = require("./project/routes/review");
 const routesOrder = require("./project/routes/order");
-const routesUpload = require("./project/routes/upload");
 const routesPassword = require("./project/routes/password");
 
 // Middlewares
@@ -45,13 +44,7 @@ app.use("/category", routesCategory);
 app.use("/cart", routesCart);
 app.use("/review", routesReview);
 app.use("/order", routesOrder);
-app.use("/upload", routesUpload);
 app.use("/password", routesPassword);
-
-// 404 Handler
-app.get("/", (req, res) => {
-  res.json({ message: "E-Commerce API is running 🚀" });
-});
 
 // Global Error Handler
 app.use((err, req, res, next) => {
