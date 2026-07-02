@@ -3,6 +3,7 @@ const AppError = require("../../utils/AppError");
 const asyncHandler = require("express-async-handler");
 const Product = require("../models/Product");
 const mongoose = require("mongoose");
+const Cart = require("../models/Cart");
 
 const getAllOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find()
@@ -59,12 +60,16 @@ const createOrder = asyncHandler(async (req, res, next) => {
   session.startTransaction();
 
   try {
-    const { products } = req.body;
+    const cart = await Cart.findOne({ user: req.user._id }).session(session);
+
+    if (!cart || cart.products.length === 0) {
+      throw new AppError("Cart is empty", 400);
+    }
 
     let totalPrice = 0;
     const orderProducts = [];
 
-    for (const item of products) {
+    for (const item of cart.products) {
       const product = await Product.findById(item.product).session(session);
 
       if (!product) {
@@ -76,7 +81,6 @@ const createOrder = asyncHandler(async (req, res, next) => {
       }
 
       product.stock -= item.quantity;
-
       await product.save({ session });
 
       orderProducts.push({
@@ -98,6 +102,10 @@ const createOrder = asyncHandler(async (req, res, next) => {
       ],
       { session },
     );
+
+    cart.products = [];
+    cart.totalPrice = 0;
+    await cart.save({ session });
 
     await session.commitTransaction();
 
@@ -150,7 +158,7 @@ const cancelOrder = asyncHandler(async (req, res, next) => {
 const updateOrder = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { paymentStatus } = req.body;
-  const allowedPaymentStatus = ["pending", "paid", "failed", "cancelled"];
+  const allowedPaymentStatus = ["pending", "paid", "failed", "refunded"];
   if (!id) {
     return next(new AppError("Order not found", 404));
   }

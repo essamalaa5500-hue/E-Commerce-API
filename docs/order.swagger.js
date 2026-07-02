@@ -56,7 +56,7 @@
 
 /**
  * @swagger
- * /orders:
+ * /order:
  *   get:
  *     summary: Get all orders (Admin only)
  *     tags: [Orders]
@@ -69,7 +69,7 @@
 
 /**
  * @swagger
- * /orders/{id}:
+ * /order/{id}:
  *   get:
  *     summary: Get order by ID (Admin only)
  *     tags: [Orders]
@@ -90,41 +90,24 @@
 
 /**
  * @swagger
- * /orders:
+ * /order:
  *   post:
- *     summary: Create order (User)
+ *     summary: Create order from user's cart (User)
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - products
- *             properties:
- *               products:
- *                 type: array
- *                 items:
- *                   type: object
- *                   required:
- *                     - product
- *                     - quantity
- *                   properties:
- *                     product:
- *                       type: string
- *                     quantity:
- *                       type: number
  *     responses:
  *       201:
  *         description: Order created successfully
+ *       400:
+ *         description: Cart is empty or insufficient stock
+ *       404:
+ *         description: Product not found
  */
 
 /**
  * @swagger
- * /orders/{id}:
+ * /order/{id}:
  *   patch:
  *     summary: Update order payment status
  *     tags: [Orders]
@@ -157,7 +140,7 @@
 
 /**
  * @swagger
- * /orders/{id}:
+ * /order/{id}:
  *   delete:
  *     summary: Delete order (Admin only)
  *     tags: [Orders]

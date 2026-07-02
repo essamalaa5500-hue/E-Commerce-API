@@ -5,7 +5,11 @@ const AppError = require("../../utils/AppError");
 const verifyToken = require("../../middleware/verifyToken");
 const verfiyAdmin = require("../../middleware/verifyAdmin");
 const upload = require("../../middleware/uploadImage");
-
+const validate = require("../../middleware/validate");
+const {
+  updateUserSchema,
+  updateProfileSchema,
+} = require("../../middleware/user.validation");
 const {
   SignUp,
   Login,
@@ -36,9 +40,16 @@ router.patch(
   "/updateProfile",
   verifyToken,
   upload.single("profileImage"),
+  validate(updateProfileSchema),
   updateProfile,
 );
-router.patch("/:id", verifyToken, verfiyAdmin, updateUser);
+router.patch(
+  "/:id",
+  verifyToken,
+  verfiyAdmin,
+  validate(updateUserSchema),
+  updateUser,
+);
 
 router.delete("/:id", verifyToken, verfiyAdmin, deleteUser);
 

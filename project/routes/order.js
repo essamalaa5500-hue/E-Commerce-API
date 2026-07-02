@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Order = require("../models/Order");
 const verifyToken = require("../../middleware/verifyToken");
-const validate = require("../../middleware/validate");
-const { createOrderSchema } = require("../../middleware/order.validation");
+
 const {
   getAllOrders,
   getOrderById,
@@ -25,6 +24,6 @@ router.patch("/my/:id/cancel", verifyToken, cancelOrder);
 router.get("/:id", verifyToken, verifyAdmin, getOrderById);
 router.patch("/:id", verifyToken, verifyAdmin, updateOrder);
 router.delete("/:id", verifyToken, verifyAdmin, deleteOrder);
-router.post("/", verifyToken, validate(createOrderSchema), createOrder);
+router.post("/", verifyToken, createOrder);
 
 module.exports = router;

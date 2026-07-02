@@ -3,7 +3,6 @@ const AppError = require("../../utils/AppError");
 const paginate = require("../../middleware/paginate");
 const asyncHandler = require("express-async-handler");
 const cloudinary = require("../../config/cloudinary");
-const math = require("mathjs");
 const Product = require("../models/Product");
 
 const getAllCategories = asyncHandler(async (req, res) => {
@@ -16,7 +15,7 @@ const getAllCategories = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     page,
-    total: math.ceil(totalCount / limit),
+    total: Math.ceil(totalCount / limit),
     results: categories.length,
     data: categories,
   });

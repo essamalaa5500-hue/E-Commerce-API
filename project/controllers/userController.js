@@ -209,11 +209,17 @@ const getUserById = asyncHandler(async (req, res, next) => {
 });
 
 const updateUser = asyncHandler(async (req, res, next) => {
-  const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+  const updates = {};
+
+  if (req.body.name) updates.name = req.body.name;
+  if (req.body.email) updates.email = req.body.email;
+  if (req.body.phone) updates.phone = req.body.phone;
+  if (req.body.role) updates.role = req.body.role;
+
+  const updatedUser = await User.findByIdAndUpdate(req.params.id, updates, {
     new: true,
     runValidators: true,
   }).select("-password -refreshToken");
-
   if (!updatedUser) {
     return next(new AppError("User not found", 404));
   }
