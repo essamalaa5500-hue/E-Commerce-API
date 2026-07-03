@@ -12,7 +12,7 @@ const options = {
 
     servers: [
       {
-        url: process.env.BASE_URL || "http://localhost:5000",
+        url: process.env.BASE_URL,
         description: process.env.BASE_URL
           ? "Production Server"
           : "Local Development Server",
