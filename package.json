@@ -1,9 +1,9 @@
 {
-  "name": "simple_api",
+  "name": "e-commerce-api",
   "version": "1.0.0",
-  "description": "E-Commerce API built with Node.js, Express, and MongoDB",
-  "author": "",
-  "license": "ISC",
+  "description": "A RESTful E-Commerce API built with Node.js, Express.js, and MongoDB.",
+  "author": "Essam Alaa",
+  "license": "MIT",
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
@@ -14,6 +14,28 @@
   "engines": {
     "node": ">=20"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/essamalaa5500-hue/E-Commerce-API.git"
+  },
+  "bugs": {
+    "url": "https://github.com/essamalaa5500-hue/E-Commerce-API/issues"
+  },
+  "homepage": "https://github.com/essamalaa5500-hue/E-Commerce-API#readme",
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb",
+    "mongoose",
+    "jwt",
+    "rest-api",
+    "ecommerce",
+    "backend",
+    "swagger",
+    "cloudinary",
+    "authentication",
+    "express-validator"
+  ],
   "dependencies": {
     "axios": "^1.18.1",
     "bcrypt": "^6.0.0",
@@ -31,8 +53,8 @@
     "multer": "^2.2.0",
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^9.0.1",
-    "slugify": "^1.6.9",
-    "swagger-jsdoc": "^6.3.0",
+    "slugify": "^1.6.6",
+    "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "yamljs": "^0.3.0"
   },

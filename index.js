@@ -12,13 +12,13 @@ require("./config/db");
 
 const swaggerDocs = require("./docs/swagger");
 
-const routesUser = require("./project/routes/user");
-const routesProduct = require("./project/routes/product");
-const routesCategory = require("./project/routes/category");
-const routesCart = require("./project/routes/cart");
-const routesReview = require("./project/routes/review");
-const routesOrder = require("./project/routes/order");
-const routesPassword = require("./project/routes/password");
+const routesUser = require("./src/routes/user");
+const routesProduct = require("./src/routes/product");
+const routesCategory = require("./src/routes/category");
+const routesCart = require("./src/routes/cart");
+const routesReview = require("./src/routes/review");
+const routesOrder = require("./src/routes/order");
+const routesPassword = require("./src/routes/password");
 
 // Middlewares
 app.use(express.json());

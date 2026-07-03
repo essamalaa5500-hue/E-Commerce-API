@@ -1,4 +1,4 @@
-const User = require("../project/models/users");
+const User = require("../src/models/users");
 const AppError = require("../utils/AppError");
 
 const verifyAdmin = async (req, res, next) => {
