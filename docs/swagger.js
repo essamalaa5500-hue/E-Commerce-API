@@ -40,6 +40,7 @@ const options = {
 };
 
 const swaggerSpec = swaggerJsdoc(options);
+
 module.exports = (app) => {
   app.use(
     "/api-docs",

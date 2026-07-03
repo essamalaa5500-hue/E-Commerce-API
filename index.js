@@ -29,8 +29,6 @@ app.use(
 );
 app.use(cors());
 
-
-
 // Home Route
 app.get("/", (req, res) => {
   res.status(200).json({
@@ -60,7 +58,7 @@ app.use((err, req, res, next) => {
     error: err.errors || null,
   });
 });
-
+console.log("BASE_URL from env:", process.env.BASE_URL);
 // Start Server
 app.listen(PORT, () => {
   console.log(` Server is running on port ${PORT}`);
