@@ -8,13 +8,15 @@ const options = {
     info: {
       title: "E-Commerce API",
       version: "1.0.0",
-      description: "REST API Documentation for E-Commerce Project",
+      description: "REST API Documentation for the E-Commerce Backend Project",
     },
 
     servers: [
       {
         url: process.env.BASE_URL || "http://localhost:5000",
-        description: "API Server",
+        description: process.env.BASE_URL
+          ? "Production Server"
+          : "Local Development Server",
       },
     ],
 
@@ -46,7 +48,7 @@ module.exports = (app) => {
     swaggerUi.serve,
     swaggerUi.setup(swaggerSpec, {
       explorer: true,
-      customSiteTitle: "E-Commerce API Docs",
+      customSiteTitle: "E-Commerce API Documentation",
     }),
   );
 };
