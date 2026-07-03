@@ -1,6 +1,5 @@
 const express = require("express");
 require("dotenv").config();
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -11,7 +10,6 @@ const cors = require("cors");
 require("./config/db");
 
 const swaggerDocs = require("./docs/swagger");
-
 const routesUser = require("./src/routes/user");
 const routesProduct = require("./src/routes/product");
 const routesCategory = require("./src/routes/category");
@@ -30,6 +28,8 @@ app.use(
   }),
 );
 app.use(cors());
+
+
 
 // Home Route
 app.get("/", (req, res) => {

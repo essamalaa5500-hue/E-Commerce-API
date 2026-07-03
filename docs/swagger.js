@@ -1,7 +1,6 @@
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 require("dotenv").config();
-
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -41,7 +40,6 @@ const options = {
 };
 
 const swaggerSpec = swaggerJsdoc(options);
-
 module.exports = (app) => {
   app.use(
     "/api-docs",
