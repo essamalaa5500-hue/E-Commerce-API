@@ -12,10 +12,12 @@ const options = {
 
     servers: [
       {
-        url: process.env.BASE_URL || "http://localhost:5000",
-        description: process.env.BASE_URL
-          ? "Production Server"
-          : "Local Development Server",
+        url: "https://essam-ecommerce-api.bonto.run",
+        description: "Production Server",
+      },
+      {
+        url: "http://localhost:5000",
+        description: "Local Development Server",
       },
     ],
 
