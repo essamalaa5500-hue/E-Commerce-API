@@ -59,6 +59,7 @@ const createCategory = asyncHandler(async (req, res, next) => {
     return next(error);
   }
 });
+
 const updateCategory = asyncHandler(async (req, res, next) => {
   const category = await Category.findById(req.params.id);
   if (!category) {
@@ -95,6 +96,7 @@ const updateCategory = asyncHandler(async (req, res, next) => {
     return next(error);
   }
 });
+
 const deleteCategory = asyncHandler(async (req, res, next) => {
   const category = await Category.findById(req.params.id);
   if (!category) {

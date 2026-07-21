@@ -1,6 +1,6 @@
 const AppError = require("../utils/AppError");
-
-const paginate = async (req, res, next) => {
+const asyncHandler = require("express-async-handler");
+const paginate = asyncHandler(async (req, res, next) => {
   const page = req.query.page !== undefined ? Number(req.query.page) : 1;
   const limit = req.query.limit !== undefined ? Number(req.query.limit) : 10;
 
@@ -21,6 +21,6 @@ const paginate = async (req, res, next) => {
   };
 
   next();
-};
+});
 
 module.exports = paginate;

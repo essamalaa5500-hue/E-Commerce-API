@@ -36,6 +36,7 @@ const getProductById = asyncHandler(async (req, res, next) => {
     data: product,
   });
 });
+
 const createProduct = asyncHandler(async (req, res, next) => {
   if (!req.files || req.files.length === 0) {
     return next(new AppError("At least one image is required", 400));
