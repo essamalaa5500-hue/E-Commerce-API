@@ -18,28 +18,32 @@ const routesReview = require("./src/routes/review");
 const routesOrder = require("./src/routes/order");
 const routesPassword = require("./src/routes/password");
 
-// Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 app.use(
   helmet({
     contentSecurityPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" },
   }),
 );
-app.use(cors());
 
-// Home Route
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    credentials: true,
+  }),
+);
+
 app.get("/", (req, res) => {
   res.status(200).json({
     message: "E-Commerce API is running 🚀",
   });
 });
 
-// Swagger
 swaggerDocs(app);
 
-// Routes
 app.use("/users", routesUser);
 app.use("/product", routesProduct);
 app.use("/category", routesCategory);
@@ -48,7 +52,6 @@ app.use("/review", routesReview);
 app.use("/order", routesOrder);
 app.use("/password", routesPassword);
 
-// Global Error Handler
 app.use((err, req, res, next) => {
   console.error(err);
 
@@ -58,8 +61,9 @@ app.use((err, req, res, next) => {
     error: err.errors || null,
   });
 });
+
 console.log("BASE_URL from env:", process.env.BASE_URL);
-// Start Server
+
 app.listen(PORT, () => {
-  console.log(` Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });

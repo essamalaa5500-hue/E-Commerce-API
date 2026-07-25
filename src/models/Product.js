@@ -15,7 +15,7 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       unique: true,
       lowercase: true,
-      required: true,
+      required: false,
     },
     description: {
       type: String,
