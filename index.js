@@ -29,12 +29,22 @@ app.use(
   }),
 );
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://e-commerce-full-stack-psi.vercel.app",
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://e-commerce-full-stack-psi.vercel.app",
-    ],
+    origin: (origin, callback) => {
+      console.log("Request Origin:", origin);
+
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Origin not allowed by CORS"));
+    },
     credentials: true,
   }),
 );
