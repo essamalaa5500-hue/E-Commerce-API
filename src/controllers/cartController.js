@@ -37,7 +37,9 @@ const getMyCart = asyncHandler(async (req, res) => {
 const addItemToCart = asyncHandler(async (req, res, next) => {
   const { productId, quantity } = req.body;
 
-  if (!productId || !quantity || quantity < 1) {
+  const parsedQuantity = parseInt(quantity, 10);
+
+  if (!productId || isNaN(parsedQuantity) || parsedQuantity < 1) {
     return next(new AppError("Invalid product or quantity", 400));
   }
 
@@ -49,25 +51,28 @@ const addItemToCart = asyncHandler(async (req, res, next) => {
 
   const cart = await getOrCreateCart(req.user._id);
 
-  const existingItem = cart.products.find(
-    (item) => item.product.toString() === productId,
-  );
+  const existingItem = cart.products.find((item) => {
+    const pId = item.product._id
+      ? item.product._id.toString()
+      : item.product.toString();
+    return pId === productId.toString();
+  });
 
   if (existingItem) {
-    if (existingItem.quantity + quantity > product.stock) {
+    if (existingItem.quantity + parsedQuantity > product.stock) {
       return next(new AppError("Insufficient stock", 400));
     }
 
-    existingItem.quantity += quantity;
+    existingItem.quantity += parsedQuantity;
     existingItem.price = product.price;
   } else {
-    if (quantity > product.stock) {
+    if (parsedQuantity > product.stock) {
       return next(new AppError("Insufficient stock", 400));
     }
 
     cart.products.push({
       product: product._id,
-      quantity,
+      quantity: parsedQuantity,
       price: product.price,
     });
   }
@@ -88,16 +93,20 @@ const addItemToCart = asyncHandler(async (req, res, next) => {
 const updateItemQuantity = asyncHandler(async (req, res, next) => {
   const { productId } = req.params;
   const { quantity } = req.body;
+  const parsedQuantity = parseInt(quantity, 10);
 
-  if (!quantity || quantity < 1) {
+  if (isNaN(parsedQuantity) || parsedQuantity < 1) {
     return next(new AppError("Invalid quantity", 400));
   }
 
   const cart = await getOrCreateCart(req.user._id);
 
-  const item = cart.products.find(
-    (item) => item.product.toString() === productId,
-  );
+  const item = cart.products.find((item) => {
+    const pId = item.product._id
+      ? item.product._id.toString()
+      : item.product.toString();
+    return pId === productId.toString();
+  });
 
   if (!item) {
     return next(new AppError("Item not found in cart", 404));
@@ -109,11 +118,11 @@ const updateItemQuantity = asyncHandler(async (req, res, next) => {
     return next(new AppError("Product not found", 404));
   }
 
-  if (quantity > product.stock) {
+  if (parsedQuantity > product.stock) {
     return next(new AppError("Insufficient stock", 400));
   }
 
-  item.quantity = quantity;
+  item.quantity = parsedQuantity;
   item.price = product.price;
 
   recalculateTotal(cart);
@@ -134,17 +143,18 @@ const removeItemFromCart = asyncHandler(async (req, res, next) => {
 
   const cart = await getOrCreateCart(req.user._id);
 
-  const item = cart.products.find(
-    (item) => item.product.toString() === productId,
-  );
+  const itemIndex = cart.products.findIndex((item) => {
+    const pId = item.product._id
+      ? item.product._id.toString()
+      : item.product.toString();
+    return pId === productId.toString();
+  });
 
-  if (!item) {
+  if (itemIndex === -1) {
     return next(new AppError("Item not found in cart", 404));
   }
 
-  cart.products = cart.products.filter(
-    (item) => item.product.toString() !== productId,
-  );
+  cart.products.splice(itemIndex, 1);
 
   recalculateTotal(cart);
 

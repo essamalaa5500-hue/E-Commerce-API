@@ -81,7 +81,7 @@ const createOrder = asyncHandler(async (req, res, next) => {
       }
 
       product.stock -= item.quantity;
-      await product.save({ session });
+      await product.save({ session, validateBeforeSave: false });
 
       orderProducts.push({
         product: product._id,

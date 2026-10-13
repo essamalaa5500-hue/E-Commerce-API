@@ -107,10 +107,13 @@ const refreshToken = asyncHandler(async (req, res, next) => {
       expiresIn: "15m",
     },
   );
+  user.password = undefined;
+  user.refreshToken = undefined;
 
   res.status(200).json({
     success: true,
     accessToken,
+    user,
   });
 });
 

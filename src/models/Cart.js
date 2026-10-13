@@ -5,7 +5,7 @@ const CartSchema = new mongoose.Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
-      ref: "users",
+      ref: "User",
       required: true,
       unique: true,
     },
@@ -19,19 +19,20 @@ const CartSchema = new mongoose.Schema(
         quantity: {
           type: Number,
           required: true,
-          min: [0, "Quantity should be greater than 0"],
+          min: [1, "Quantity must be at least 1"],
         },
         price: {
           type: Number,
           required: true,
-          min: [0, "Price should be greater than 0"],
+          min: [0, "Price cannot be negative"],
         },
       },
     ],
     totalPrice: {
       type: Number,
       required: true,
-      min: [0, "Total price should be greater than 0"],
+      default: 0,
+      min: [0, "Total price cannot be negative"],
     },
   },
   { timestamps: true },
