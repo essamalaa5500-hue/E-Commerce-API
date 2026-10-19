@@ -7,7 +7,8 @@ const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const cors = require("cors");
 
-require("./config/db");
+const connectDB = require("./config/db");
+connectDB();
 
 const swaggerDocs = require("./docs/swagger");
 const routesUser = require("./src/routes/user");
@@ -80,3 +81,5 @@ console.log("BASE_URL from env:", process.env.BASE_URL);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+module.exports = app;
