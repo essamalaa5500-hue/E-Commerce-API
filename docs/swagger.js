@@ -1,6 +1,7 @@
+const path = require("path");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-require("dotenv").config();
+
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -9,7 +10,6 @@ const options = {
       version: "1.0.0",
       description: "REST API Documentation for the E-Commerce Backend Project",
     },
-
     servers: [
       {
         url: "https://e-commerce-api-phi-sage.vercel.app",
@@ -20,7 +20,6 @@ const options = {
         description: "Local Development Server",
       },
     ],
-
     components: {
       securitySchemes: {
         bearerAuth: {
@@ -30,15 +29,21 @@ const options = {
         },
       },
     },
-
     security: [
       {
         bearerAuth: [],
       },
     ],
   },
-
-  apis: ["./docs/*.swagger.js"],
+  apis: [
+    path.join(__dirname, "./cart.swagger.js"),
+    path.join(__dirname, "./category.swagger.js"),
+    path.join(__dirname, "./order.swagger.js"),
+    path.join(__dirname, "./password.swagger.js"),
+    path.join(__dirname, "./products.swagger.js"),
+    path.join(__dirname, "./review.swagger.js"),
+    path.join(__dirname, "./users.swagger.js"),
+  ],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
