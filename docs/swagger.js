@@ -12,7 +12,7 @@ const options = {
 
     servers: [
       {
-        url: "https://essam-ecommerce-api.bonto.run",
+        url: "https://e-commerce-api-phi-sage.vercel.app",
         description: "Production Server",
       },
       {
